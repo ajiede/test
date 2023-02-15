@@ -1,8 +1,11 @@
 package com.sfac.hk.property.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.sfac.hk.account.dao.UserDao;
 import com.sfac.hk.account.entity.User;
 import com.sfac.hk.common.vo.Result;
+import com.sfac.hk.common.vo.Search;
 import com.sfac.hk.property.dao.BooksDao;
 import com.sfac.hk.property.entity.Books;
 import com.sfac.hk.property.dao.BooksUserDao;
@@ -92,18 +95,31 @@ public class BooksServiceImpl implements BooksService {
 
 	@Override
 	public Books getBooksById(int id) {
-		// 查询 books 对象
+		// ==== 方式一 ====
+//		// 查询 books 对象
+//		Books books = booksDao.getBooksById(id);
+//		// 查询 members 列表
+//		List<User> members = Optional
+//				.ofNullable(userDao.getUsersByBooksId(id))
+//				.orElse(Collections.emptyList());
+//		// 组装返回
+//		if (books != null) {
+//			books.setMembers(members);
+//		}
+
+		// ==== 方式二 ====
 		Books books = booksDao.getBooksById(id);
-		// 查询 members 列表
-		List<User> members = Optional
-				.ofNullable(userDao.getUsersByBooksId(id))
-				.orElse(Collections.emptyList());
-		// 组装返回
-		if (books != null) {
-			books.setMembers(members);
-		}
 
 		// TODO 包装进出、余额数据
 		return books;
+	}
+
+	@Override
+	public PageInfo<Books> getBooksListBySearch(Search search) {
+		search.initSearch();
+		PageHelper.startPage(search.getCurrentPage(), search.getPageSize());
+		return new PageInfo<>(Optional
+				.ofNullable(booksDao.getBooksListBySearch(search))
+				.orElse(Collections.emptyList()));
 	}
 }

@@ -1,6 +1,8 @@
 package com.sfac.hk.property.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.sfac.hk.common.vo.Result;
+import com.sfac.hk.common.vo.Search;
 import com.sfac.hk.property.entity.Books;
 import com.sfac.hk.property.service.BooksService;
 import org.apache.ibatis.annotations.Delete;
@@ -56,5 +58,14 @@ public class BooksController {
 	@GetMapping(value = "/books/{id}")
 	public Books getBooksById(@PathVariable int id) {
 		return booksService.getBooksById(id);
+	}
+
+	/**
+	 * 127.0.0.1/api/economy/booksList ---- post
+	 * {"currentPage":1, "pageSize":5, "sort":"id", "direction":"desc", "keyword":""}
+	 */
+	@PostMapping(value="booksList", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public PageInfo<Books> getBooksListBySearch(@RequestBody Search search) {
+		return booksService.getBooksListBySearch(search);
 	}
 }
