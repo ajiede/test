@@ -24,7 +24,12 @@ public enum ImageType {
 		this.size = size;
 	}
 
-	public static void main(String[] args) {
-		System.out.println(ImageType.values());
+	public static ImageType getImageTypeByName(String name) {
+		for (ImageType item : ImageType.values()) {
+			if (item.name.equals(name)) {
+				return item;
+			}
+		}
+		return null;
 	}
 }
