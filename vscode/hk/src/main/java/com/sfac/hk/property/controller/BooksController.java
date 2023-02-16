@@ -5,9 +5,12 @@ import com.sfac.hk.common.vo.Result;
 import com.sfac.hk.common.vo.Search;
 import com.sfac.hk.property.entity.Books;
 import com.sfac.hk.property.service.BooksService;
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import java.awt.*;
 
 /**
  * @Description BooksController

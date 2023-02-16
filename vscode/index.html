@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:v-bind="http://www.w3.org/1999/xhtml"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro"
+>
+	<head>
+		<title>Spring_Boot</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="description" content="HHHHH.COM" />
+
+		<!-- 引入 js -->
+		<!-- jQuery -->
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js" type="text/javascript"></script>
+		<!-- Vue -->
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js" type="text/javascript"></script>
+
+		<style>
+			.fade-enter-active,
+			.fade-leave-active {
+				transition: opacity 2s;
+			}
+			.fade-enter,
+			.fade-leave-to {
+				opacity: 0;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="myDIv" class="aaa">
+			<p>==== 数据单项绑定 ====</p>
+			<h3>{{title}}</h3>
+			<input type="text" :value="user.name" />
+			<input type="text" :value="user.age" />
+			<input type="text" :value="user.gender" />
+
+			<p>==== 数据双向项绑定 ====</p>
+			<input type="text" v-model="user.name" />
+			<input type="text" v-model="user.age" />
+			<input type="text" v-model="user.gender" />
+			<input type="text" v-model="user.roleId" />
+
+			<p>==== 事件绑定 ====</p>
+			<button @click="test1">按钮1</button>
+
+			<p>==== 条件渲染 ====</p>
+			<p v-if="user.gender == 'male'">我是一个帅哥。</p>
+			<p v-else>我是一个美女！</p>
+			<p v-show="user.gender == 'male'">我是一个帅哥。</p>
+
+			<p>==== 列表渲染 ====</p>
+			<ul>
+				<li v-for="item in roles" :key="item.id">{{item.name}}</li>
+			</ul>
+			<select v-model="user.roleId">
+				<option v-for="item in roles" :key="item.id" :value="item.id">{{item.name}}</option>
+			</select>
+			<table>
+				<tr>
+					<td>ID</td>
+					<td>Name</td>
+				</tr>
+				<tr v-for="(item, index) in roles" :key="index">
+					<td>{{item.id}}</td>
+					<td>{{item.name}}</td>
+				</tr>
+			</table>
+
+			<p>==== 监听器 ====</p>
+			<input type="text" v-model="title" />
+			<p>{{tem}}</p>
+
+			<p>==== 计算器 ====</p>
+			<p>{{capitalize}}</p>
+
+			<p>==== 过滤器 ====</p>
+			<p>{{user.name | filter1 | filter2}}</p>
+
+			<p>==== 过渡动画 ====</p>
+			<button @click="show = !show">按钮2</button>
+			<transition name="fade"><div v-if="show">我是一个动画展示框</div></transition>
+		</div>
+	</body>
+
+	<script>
+		$(function () {
+			test1();
+		});
+
+		Vue.filter("filter2", function (value) {
+			if (!value) {
+				return "";
+			}
+			return value.replace("h", "-");
+		});
+
+		var myVue = new Vue({
+			el: "#myDIv",
+			data: {
+				title: "This is vue test page.",
+				tem: "",
+				user: {
+					name: "hujiang",
+					age: 18,
+					gender: "male",
+					roleId: 3,
+				},
+				unem: "",
+				roles: [
+					{ id: 1, name: "admin" },
+					{ id: 2, name: "manager" },
+					{ id: 3, name: "staff" },
+				],
+				show: true,
+			},
+			methods: {
+				test1: function () {
+					console.log("This is test 1 function.");
+				},
+				test2: function () {
+					console.log("This is test 2 function.");
+				},
+			},
+			watch: {
+				title(newValue, oldValue) {
+					this.tem = this.title.length > 6 ? "标题太长了！" : "";
+				},
+				"user.name"(newValue, oldValue) {
+					this.unem = this.title.length > 6 ? "标题太长了！" : "";
+				},
+			},
+			computed: {
+				capitalize: function () {
+					return this.user.name[0].toUpperCase() + this.user.name.substr(1);
+				},
+			},
+			filters: {
+				filter1: function (value) {
+					if (!value) {
+						return "";
+					}
+					return value.replace("a", "*");
+				},
+			},
+			created() {
+				window.test1 = this.test1;
+			},
+			mounted() {
+				this.test2();
+			},
+		});
+		// $(function(){
+		// 	ajaxTest();
+		// });
+
+		// function ajaxTest() {
+		// 	$.ajax({
+		// 		url : "http://127.0.0.1/api/test/helloWorld",
+		// 		type : "get",
+		// 		//contentType: "application/json",
+		// 		//data : JSON.stringify(user),
+		// 		success : function (data) {
+		// 			$("#myDIv").html(data);
+		// 		},
+		// 		error : function (data) {
+		// 			alert(data.responseText);
+		// 		}
+		// 	});
+		// }
+	</script>
+</html>
